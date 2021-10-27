@@ -3,6 +3,9 @@
 ## Create database
 run createDb.sh
 
+## Run test
+run test.sh
+
 ## install C++
 sudo apt-get install gcc g++ cmake git libssl-dev zlib1g-dev librdkafka-dev mysql-server mysql-client libmysqlclient-dev libboost-all-dev
 

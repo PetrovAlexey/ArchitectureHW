@@ -1,4 +1,7 @@
-# hl_event_server
+# simple poco server
+
+## Create database
+run createDb.sh
 
 ## install C++
 sudo apt-get install gcc g++ cmake git libssl-dev zlib1g-dev librdkafka-dev mysql-server mysql-client libmysqlclient-dev libboost-all-dev

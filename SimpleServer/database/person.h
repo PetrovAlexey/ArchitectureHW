@@ -43,6 +43,7 @@ namespace database
             void save_to_cache();
 
             Poco::JSON::Object::Ptr toJSON() const;
+            Poco::JSON::Object::Ptr toFullJSON() const;
 
 
     };

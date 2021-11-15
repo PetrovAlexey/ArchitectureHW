@@ -62,9 +62,11 @@ namespace database
     {
         try
         {
-            std::string result;
-            if (database::Cache::get().get(login, result))
+            std::string result{};
+            auto instance = database::Cache::get();
+            if (instance.get(login, result) && !result.empty()) {
                 return fromJSON(result);
+            }
             else
                 throw std::logic_error("key not found in the cache");
         }
@@ -78,9 +80,22 @@ namespace database
     void Person::save_to_cache()
     {
         std::stringstream ss;
-        Poco::JSON::Stringifier::stringify(toJSON(), ss);
+        Poco::JSON::Stringifier::stringify(toFullJSON(), ss);
         std::string message = ss.str();
         database::Cache::get().put(_login, message);
+    }
+
+    Poco::JSON::Object::Ptr Person::toFullJSON() const
+    {
+        Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
+
+        root->set("id", _id);
+        root->set("first_name", _first_name);
+        root->set("last_name", _last_name);
+        root->set("login", _login);
+        root->set("age", _age);
+
+        return root;
     }
 
     Poco::JSON::Object::Ptr Person::toJSON() const

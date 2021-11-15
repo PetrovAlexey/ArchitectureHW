@@ -31,7 +31,7 @@ add_executable(${EXAMPLE_BINARY} main.cpp
         database/cache.cpp
         database/person.cpp)
 
-add_executable(${TESTS} test/unittest.cpp config/config.cpp database/database.cpp
+add_executable(${TESTS} test/unittest.cpp config/config.cpp database/database.cpp database/cache.cpp
         database/person.cpp)
 
 
@@ -56,7 +56,14 @@ target_link_libraries(${TESTS} ${CMAKE_THREAD_LIBS_INIT}
         ${Poco_LIBRARIES}
         "PocoData"
         "PocoDataMySQL"
-        "mysqlclient" ${GTEST_LIBRARIES})
+        "mysqlclient"
+        ${GTEST_LIBRARIES}
+        "ignite-binary"
+        "ignite"
+        "ignite-common"
+        ${IGNITE_JNI_LIB}
+        "ignite-thin-client"
+        ZLIB::ZLIB)
 
 
 set_target_properties(${EXAMPLE_BINARY} PROPERTIES LINKER_LANGUAGE CXX)

@@ -36,8 +36,13 @@ namespace database
                         << "`last_name` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,"
                         << "`login` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL UNIQUE,"
                         << "`age` INTEGER NULL,"
-                        << "PRIMARY KEY (`id`),KEY `lg` (`login`), KEY `fn` (`first_name`),KEY `ln` (`last_name`));",
+                        << "PRIMARY KEY (`id`),KEY `lg` (`login`), KEY `fn` (`first_name`), KEY `ln` (`last_name`));",
                 now;
+
+            // (re)create index
+            Statement create_index(session);
+            create_index << "CREATE INDEX IF NOT EXISTS ln_fn using btree on Person(last_name, first_name);",
+                    now;
         }
 
         catch (Poco::Data::MySQL::ConnectionException &e)
@@ -51,6 +56,31 @@ namespace database
             std::cout << "statement:" << e.what() << std::endl;
             throw;
         }
+    }
+
+    Person Person::read_from_cache_by_login(std::string login)
+    {
+        try
+        {
+            std::string result;
+            if (database::Cache::get().get(login, result))
+                return fromJSON(result);
+            else
+                throw std::logic_error("key not found in the cache");
+        }
+        catch (std::exception &err)
+        {
+            std::cout << err.what() << std::endl;
+            throw;
+        }
+    }
+
+    void Person::save_to_cache()
+    {
+        std::stringstream ss;
+        Poco::JSON::Stringifier::stringify(toJSON(), ss);
+        std::string message = ss.str();
+        database::Cache::get().put(_login, message);
     }
 
     Poco::JSON::Object::Ptr Person::toJSON() const

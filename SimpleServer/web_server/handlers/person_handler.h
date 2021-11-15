@@ -153,6 +153,7 @@ public:
                                 try
                                 {
                                     person.save_to_mysql();
+                                    person.save_to_cache();
                                     ostr << "{ \"result\": true }";
                                     ostr.flush();
                                     return;
@@ -175,9 +176,23 @@ public:
             {
                 std::cout << "Get person by login " << std::endl;
                 std::string login = form.get("login");
+                try {
+                    std::cout << "Get item from cache" << std::endl;
+                    database::Person result = database::Person::read_from_cache_by_login(login);
+                    if (!result.login().empty()) {
+                        Poco::JSON::Stringifier::stringify(result.toJSON(), ostr);
+                    }
+                    return;
+                }
+                catch (...)
+                {
+                    std::cout << "Some error on cache" << std::endl;
+                }
+
                 try
                 {
                     database::Person result = database::Person::read_by_login(login);
+                    result.save_to_cache();
                     Poco::JSON::Stringifier::stringify(result.toJSON(), ostr);
                     return;
                 }

@@ -3,6 +3,12 @@
 ## Create database
 run createDb.sh
 
+## Run service
+run start.sh
+
+## Run event-writer service
+run start_writer.sh
+
 ## Run test
 run test.sh
 

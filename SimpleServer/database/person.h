@@ -37,10 +37,10 @@ namespace database
             static std::vector<Person> read_all();
             static std::vector<Person> search(std::string first_name, std::string last_name);
             void save_to_mysql();
+            void send_to_queue();
 
             Poco::JSON::Object::Ptr toJSON() const;
-
-
+            Poco::JSON::Object::Ptr toFullJSON() const;
     };
 }
 

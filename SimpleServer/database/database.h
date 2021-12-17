@@ -8,12 +8,14 @@
 
 namespace database{
     class Database{
-        private:
-            std::string _connection_string;
-            Database();
-        public:
-            static Database& get();
-            Poco::Data::Session create_session();
+    private:
+        std::string _connection_string_read;
+        std::string _connection_string_write;
+        Database();
+    public:
+        static Database& get();
+        Poco::Data::Session create_session_read();
+        Poco::Data::Session create_session_write();
     };
 }
 #endif

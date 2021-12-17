@@ -152,7 +152,8 @@ public:
                             {
                                 try
                                 {
-                                    person.save_to_mysql();
+                                    person.send_to_queue();
+                                    //person.save_to_mysql();
                                     ostr << "{ \"result\": true }";
                                     ostr.flush();
                                     return;

@@ -13,7 +13,12 @@ protected:
         Config::get().login() = "petrov";
         Config::get().password() = "petrov";
         Config::get().port() = "3306";
-        Config::get().host() = "localhost";
+        Config::get().queue_group_id() = "0";
+        Config::get().queue_host() = "127.0.0.1:9092";
+        Config::get().queue_topic() = "event_server";
+        Config::get().read_request_ip() = "127.0.0.1";
+        Config::get().write_request_ip() = "127.0.0.1";
+
         Config::get().database() = "hw";
 
         database::Person test;
@@ -25,7 +30,7 @@ protected:
         test.first_name() = "test";
         test.last_name() = "test";
 
-        test.save_to_mysql();
+        test.send_to_queue();
     }
 };
 

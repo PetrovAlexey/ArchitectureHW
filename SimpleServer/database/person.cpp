@@ -39,6 +39,11 @@ namespace database
                         << "`age` INTEGER NULL,"
                         << "PRIMARY KEY (`id`),KEY `lg` (`login`), KEY `fn` (`first_name`),KEY `ln` (`last_name`));",
                 now;
+
+            // (re)create index
+            Statement create_index(session);
+            create_index << "CREATE INDEX IF NOT EXISTS ln_fn using btree on Person(last_name, first_name);",
+                    now;
         }
 
         catch (Poco::Data::MySQL::ConnectionException &e)
